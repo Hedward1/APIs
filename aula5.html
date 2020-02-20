@@ -1,0 +1,113 @@
+<html>
+	<head>
+
+	</head>
+	
+	<style>
+	
+		div{
+			display: inline-block;
+		}
+		
+		span{
+			padding-top: 20px;
+			display: inline-grid;
+		}
+		
+		#main{
+			padding:10px;
+		}
+	
+		.celula{
+			width: 20%;
+			height:auto;
+			text-align:center;
+		}
+		
+		.imagem-celula{
+			max-width : 100%;
+			display: flex;
+			height:auto;
+		}
+	
+	</style>
+	
+	<body>
+	
+		<div id="main">
+				
+			<div id="conteudo"></div>
+				
+
+		</div>
+
+	</body>
+	
+	<script>
+	
+		var products = [];
+
+		function carregarProdutos(){
+			
+			var request = new XMLHttpRequest();
+			request.open("GET",
+			"http://apps.mobfirst.com/vtex/products/search?&_from=0&_to=49&baseUrl=http://www.lojagrow.com.br/",
+			false);
+			
+			request.send(null);
+			
+			products = JSON.parse(request.responseText);
+			
+			inserirProdutosNaPagina();
+		}
+		
+		
+		function inserirProdutosNaPagina(){
+		
+			
+			var linha = 0;
+			var index = 0;
+			var numeroProdutoLinha = 4;
+			var numeroLinhas = products.length/numeroProdutoLinha + 1;
+			
+			var divPagina = "";
+			
+			for( linha = 0 ; linha < numeroLinhas ; linha++){
+		
+				var divLinha = "";
+				for(index = linha*numeroProdutoLinha; 
+					index < (linha+1)*numeroProdutoLinha;
+					index++){
+					
+					if(index < products.length){
+				
+						var produto  = products[index];
+						var item;
+						var imagem;
+					
+						for(item of produto["items"]){
+					
+							for(image of item["images"]){
+						
+								imagem = image.imageUrl;
+								break;
+							}
+							break;
+						}
+						divLinha += "<div class='celula'> <img class='imagem-celula' src='" +imagem+ "' /> <span> "+ produto["productName"] +" </span></div>";
+					}	
+				}
+				
+				divPagina+="<div class='linha'>"+ divLinha + "</div>";
+			}
+			
+		
+			document.getElementById("conteudo")
+						.innerHTML = divPagina;
+		}
+	
+		carregarProdutos();
+		
+	</script>
+	
+</html>

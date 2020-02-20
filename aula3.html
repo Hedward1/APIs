@@ -1,0 +1,68 @@
+<html>
+
+	<head>
+	
+	</head>
+	
+	<body>
+		<div id="main">
+		
+		
+			
+		</div>
+	
+	
+	</body>
+
+	<script>
+		
+		var products = [];
+		var page = 0;
+		
+		function carregarProdutos(){
+		
+			var request = new XMLHttpRequest();
+			request.open("GET",
+			"http://apps.mobfirst.com/vtex/products/search?&baseUrl=http://www.ciamaritima.com.br/api/catalog_system/pub/products/search/",
+			false);
+			
+			request.send(null);
+			
+			products = JSON.parse(request.responseText);
+			
+			inserirProdutosNaPagina ();
+			
+		}
+		
+		function inserirProdutosNaPagina (){
+		
+			var numeroProdutos = 3;
+			var index = 0;
+			
+			var divPagina = "";
+			for(index = page*numeroProdutos;
+				index < (page+1)*numeroProdutos;
+				index++) {
+							
+						var produto = products[index];
+						var imagem = "https://ciamaritima.vteximg.com.br/arquivos/ids/185911/F79_05985_CAMISA_LARANJA_LISO_1700.jpg?v=637006119932300000"
+						divPagina += "<div><img src= '" + imagem+ "'/> <span>" + produto["productName"]+"</span></div>";
+			}
+			
+			document.getElementById("main")
+						.innerHTML = divPagina;
+		
+		}
+		
+		carregarProdutos();
+
+		
+	</script>
+	
+	
+	
+	
+	
+
+
+</html>
